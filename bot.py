@@ -3,6 +3,8 @@ from nextcord.ext import commands
 from nextcord import Interaction
 from dotenv import load_dotenv
 import os
+from flask import Flask
+from threading import Thread
 
 # Load environment variables from .env file
 load_dotenv()
@@ -21,6 +23,18 @@ bot = commands.Bot(intents=intents)
 @bot.event
 async def on_ready():
     print(f'We have logged in as {bot.user}')
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+t = Thread(target=run)
+t.start()
 
 @bot.slash_command(name="hello", description="Say Hello")
 async def hello(interaction: Interaction):
